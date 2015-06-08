@@ -67,11 +67,11 @@ require 'GDText/Box.php';
 
 $headerText = isset($_POST['day']) ? 'Dzień '.$_POST['day'] : 'Dzień 1';
 $routeText = isset($_POST['route']) ? $_POST['route'] : '';
-$descriptionText = isset($_POST['description']) ? $_POST['description'] : '';
+$descriptionText = isset($_POST['description']) ? trim($_POST['description']) : '';
 
 $textPath = 'text-layer.png';
 $textMaskPath = 'text-layer-mask.png';
-$mapPath = downloadMap('48.216667,16.366667');
+$mapPath = downloadMap('43.2710,6.6459');
 
 $dstWidth = 1100;
 $dstHeight = 640;
@@ -100,9 +100,9 @@ imagefill($mapLayerImg, 0, 0, $colorTransparent);
 $colorBg = imagecolorallocate($img, 255, 255, 255);
 $colorShadow = imagecolorallocate($img, 255, 255, 255);
 $colorBorder = imagecolorallocate($img, 0, 0, 0);
-$colorHeader = imagecolorallocate($img, 80, 148, 206);
+$colorHeader = imagecolorallocate($img, 255, 92, 92);
 $colorRoute = imagecolorallocate($img, 50, 50, 50);
-$colorText = imagecolorallocate($img, 30, 30, 30);
+$colorText = imagecolorallocate($img, 120, 120, 120);
 
 
 //fill bg
@@ -143,14 +143,10 @@ $box->setFontFace(__DIR__.'/fonts/Lato-Light.ttf');
 $box->setFontColor($colorText);
 $box->setFontSize(19);
 $box->setLineHeight(1.4);
-$box->setBox(640, 260, 420, 300);
+$box->setBox(630, 260, 440, 300);
 $box->setTextAlign('right', 'top');
 $box->draw($descriptionText);
 
-
-
-//todo:remove
-imagerectangle($img, 0, 0, $dstWidth - 1, $dstHeight - 1, $colorBorder);
 
 //send photo to user
 header('Content-type: image/png');
