@@ -66,12 +66,12 @@ require 'GDText/Box.php';
 
 
 $headerText = isset($_POST['day']) ? 'Dzień '.$_POST['day'] : 'Dzień 1';
-$routeText = isset($_POST['route']) ? 'Trasa: '.$_POST['route'] : '';
+$routeText = isset($_POST['route']) ? $_POST['route'] : '';
 $descriptionText = isset($_POST['description']) ? $_POST['description'] : '';
 
 $textPath = 'text-layer.png';
 $textMaskPath = 'text-layer-mask.png';
-$mapPath = downloadMap('49.826613099999996,19.043443099999998');
+$mapPath = downloadMap('48.216667,16.366667');
 
 $dstWidth = 1100;
 $dstHeight = 640;
@@ -82,8 +82,9 @@ list($srcWidth, $srcHeight) = getimagesize($srcPath);
 
 //new image
 $img = imagecreatetruecolor($dstWidth, $dstHeight);
-$mapLayer = imagecreatetruecolor($dstWidth, $dstHeight);
+$mapLayerImg = imagecreatetruecolor($dstWidth, $dstHeight);
 $maskLayerImg = imagecreatefrompng('text-layer-mask.png');
+$dotLayerImg = imagecreatefrompng('dot-layer.png');
 
 $bgImg = imagecreatefromjpeg($srcPath);
 $textImg = imagecreatefrompng($textPath);
@@ -91,12 +92,13 @@ $mapImg = imagecreatefrompng($mapPath);
 
 
 //alpha
-imagesavealpha($mapLayer, true);
-$colorTransparent = imagecolorallocatealpha($mapLayer, 255, 255, 255, 0);
-imagefill($mapLayer, 0, 0, $colorTransparent);
+imagesavealpha($mapLayerImg, true);
+$colorTransparent = imagecolorallocatealpha($mapLayerImg, 255, 255, 255, 0);
+imagefill($mapLayerImg, 0, 0, $colorTransparent);
 
 //colors
 $colorBg = imagecolorallocate($img, 255, 255, 255);
+$colorShadow = imagecolorallocate($img, 255, 255, 255);
 $colorBorder = imagecolorallocate($img, 0, 0, 0);
 $colorHeader = imagecolorallocate($img, 80, 148, 206);
 $colorRoute = imagecolorallocate($img, 50, 50, 50);
@@ -109,10 +111,11 @@ imagefilledrectangle($img, 0, 0, $dstWidth, $dstHeight, $colorBg);
 imagecopyresized($img, $bgImg, 0, 0, 0, 0, 640, 640, $srcWidth, $srcHeight);
 imagecopyresized($img, $textImg, 0, 0, 0, 0, $dstWidth, $dstHeight, $dstWidth, $dstHeight);
 
-imagecopyresized($mapLayer, $mapImg, $dstWidth - 550, $dstHeight - 200, 0, 50, 600, 300, 600, 300);
-imagealphamask($mapLayer, $maskLayerImg);
+imagecopyresized($mapLayerImg, $mapImg, $dstWidth - 550, $dstHeight - 180, 0, 50, 600, 300, 600, 300);
+imagealphamask($mapLayerImg, $maskLayerImg);
 
-imagecopyresized($img, $mapLayer, 0, 0, 0, 0, $dstWidth, $dstHeight, $dstWidth, $dstHeight);
+imagecopyresized($img, $mapLayerImg, 0, 0, 0, 0, $dstWidth, $dstHeight, $dstWidth, $dstHeight);
+imagecopyresized($img, $dotLayerImg, 840, 550, 0, 0, 200, 100, 200, 100);
 
 
 //header text
@@ -138,11 +141,12 @@ $box->draw($routeText);
 $box = new Box($img);
 $box->setFontFace(__DIR__.'/fonts/Lato-Light.ttf');
 $box->setFontColor($colorText);
-$box->setFontSize(18);
+$box->setFontSize(19);
 $box->setLineHeight(1.4);
 $box->setBox(640, 260, 420, 300);
 $box->setTextAlign('right', 'top');
 $box->draw($descriptionText);
+
 
 
 //todo:remove
