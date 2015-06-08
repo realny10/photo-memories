@@ -5,10 +5,22 @@ if(!$_POST) {
 	die;
 }
 
+$srcPath = false;
+if(isset($_FILES['file']) && $_FILES['file']['size'] != 0) {
+
+	$srcExtension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+	$srcPath = 'tmp/'.md5(rand()).'.'.$srcExtension;
+
+	move_uploaded_file($_FILES['file']['tmp_name'], $srcPath);
+}
+
+if($srcPath == false) {
+	header('Location: ./');
+	die;
+}
 
 require 'GDText/Box.php';
 
-$srcPath = 'sample.jpg';
 $textPath = 'text-layer.png';
 
 $headerText = isset($_POST['day']) ? 'Dzień '.$_POST['day'] : 'Dzień 1';
@@ -17,6 +29,10 @@ $descriptionText = isset($_POST['description']) ? $_POST['description'] : '';
 
 $dstWidth = 1100;
 $dstHeight = 640;
+
+//calculate width/height
+list($srcWidth, $srcHeight) = getimagesize($srcPath);
+
 
 //new image
 $img = imagecreatetruecolor($dstWidth, $dstHeight);
@@ -35,7 +51,7 @@ $colorText = imagecolorallocate($img, 30, 30, 30);
 //fill bg
 imagefilledrectangle($img, 0, 0, $dstWidth, $dstHeight, $colorBg);
 
-imagecopyresized($img, $bgImg, 0, 0, 0, 0, 640, 640, 640, 640);
+imagecopyresized($img, $bgImg, 0, 0, 0, 0, 640, 640, $srcWidth, $srcHeight);
 imagecopyresized($img, $textImg, 0, 0, 0, 0, $dstWidth, $dstHeight, $dstWidth, $dstHeight);
 
 

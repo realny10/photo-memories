@@ -47,6 +47,10 @@ dl>dd:last-child {
 	margin-bottom: 0;
 }
 
+a {
+	color: #ff5050;
+}
+
 button {
 	background: #ff5050;
 	color: #fff;
