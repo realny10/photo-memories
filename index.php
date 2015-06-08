@@ -42,7 +42,7 @@
 			Lokalizacja - <a href="#" class="jQ_getLocalization">Pobierz</a>
 		</dt>
 		<dd>
-			<input type="text" name="coords" readonly />
+			<input type="text" name="coords" class="jQ_getLocalizationInput" readonly />
 		</dd>
 
 		<dd>
@@ -50,5 +50,7 @@
 		</dd>
 	</dl>
 </form>
+<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
 </body>
 </html>
