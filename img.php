@@ -100,7 +100,7 @@ imagefill($mapLayerImg, 0, 0, $colorTransparent);
 $colorBg = imagecolorallocate($img, 255, 255, 255);
 $colorShadow = imagecolorallocate($img, 255, 255, 255);
 $colorBorder = imagecolorallocate($img, 0, 0, 0);
-$colorHeader = imagecolorallocate($img, 255, 92, 92);
+$colorHeader = imagecolorallocate($img, 207, 13, 14);
 $colorRoute = imagecolorallocate($img, 50, 50, 50);
 $colorText = imagecolorallocate($img, 120, 120, 120);
 
@@ -149,5 +149,5 @@ $box->draw($descriptionText);
 
 
 //send photo to user
-header('Content-type: image/png');
-imagepng($img);
+header('Content-type: image/jpeg');
+imagejpeg($img, null, 50);
