@@ -68,10 +68,11 @@ require 'GDText/Box.php';
 $headerText = isset($_POST['day']) ? 'Dzień '.$_POST['day'] : 'Dzień 1';
 $routeText = isset($_POST['route']) ? $_POST['route'] : '';
 $descriptionText = isset($_POST['description']) ? trim($_POST['description']) : '';
+$coords = isset($_POST['coords']) ? trim($_POST['coords']) : '';
 
 $textPath = 'text-layer.png';
 $textMaskPath = 'text-layer-mask.png';
-$mapPath = downloadMap('43.2710,6.6459');
+$mapPath = downloadMap($coords);
 
 $dstWidth = 1100;
 $dstHeight = 640;
@@ -144,10 +145,11 @@ $box->setFontColor($colorText);
 $box->setFontSize(19);
 $box->setLineHeight(1.4);
 $box->setBox(630, 260, 440, 300);
-$box->setTextAlign('right', 'top');
+$box->setTextAlign('center', 'top');
 $box->draw($descriptionText);
 
 
 //send photo to user
 header('Content-type: image/jpeg');
-imagejpeg($img, null, 50);
+header('Content-Disposition: inline; filename="day-'.$_POST['day'].'.jpg"');
+imagejpeg($img, null, 100);
